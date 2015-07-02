@@ -25,7 +25,9 @@ class BooksList extends React.Component {
   }
   renderBook(book) {
     return (
-      <TouchableHighlight onPress={this.props.onRowPress.bind(null, book)}>
+      <TouchableHighlight
+        underlayColor="#007aff"
+        onPress={this.props.onRowPress.bind(null, book)}>
         <View style={styles.row}>
           <Image style={styles.image}
             source={{ uri: book.coverUrl }} />
