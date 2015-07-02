@@ -1,7 +1,6 @@
 var React = require('react-native')
 
 var {
-  AppRegistry,
   StyleSheet,
   Text,
   Image,
@@ -20,6 +19,7 @@ class BooksList extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
+    console.log('newProps.books', newProps.books)
     if (newProps.books)
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(newProps.books)
@@ -58,8 +58,7 @@ module.exports = BooksList
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: 20
+    flex: 1
   },
   row: {
     flex: 1,

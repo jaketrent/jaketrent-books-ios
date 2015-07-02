@@ -32,6 +32,7 @@ exports.fetch = function fetchBooks() {
       resAndJson.json.then((json) => {
         if (res.status >= 200 && res.status < 300) {
           var books = json.books.map((book) => camelCase(book))
+          console.log('books', books)
           getActions().fetchSuccess(books)
         } else {
           // TODO: errors
