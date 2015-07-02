@@ -1,6 +1,7 @@
 var React = require('react-native')
 
 var actions = require('./books-actions')
+var BookDetail = require('./book-detail')
 var BooksList = require('./books-list')
 var store = require('./books-store')
 
@@ -22,9 +23,16 @@ module.exports = class BooksIndex extends React.Component {
   handleStoreStateChange() {
     this.setState(store.getState())
   }
+  handleRowPress(book) {
+    this.props.navigator.push({
+      title: book.title,
+      component: BookDetail,
+      passProps: { book }
+    });
+  }
   render() {
     return (
-      <BooksList books={this.state.books} />
+      <BooksList books={this.state.books} onRowPress={this.handleRowPress.bind(this)} />
     )
   }
 }

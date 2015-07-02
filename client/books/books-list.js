@@ -5,21 +5,19 @@ var {
   Text,
   Image,
   View,
-  ListView
+  ListView,
+  TouchableHighlight
 } = React
 
 class BooksList extends React.Component {
   constructor(props) {
     super(props)
-
-    console.log('this.props.books', this.props.books)
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
     this.state = {
       dataSource: ds.cloneWithRows(this.props.books)
     }
   }
   componentWillReceiveProps(newProps) {
-    console.log('newProps.books', newProps.books)
     if (newProps.books)
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(newProps.books)
@@ -27,18 +25,20 @@ class BooksList extends React.Component {
   }
   renderBook(book) {
     return (
-      <View style={styles.row}>
-        <Image style={styles.image}
-          source={{ uri: book.coverUrl }} />
-        <View style={styles.body}>
-          <Text style={styles.title}>
-            {book.title}
-          </Text>
-          <Text style={styles.author}>
-            {book.author}
-          </Text>
+      <TouchableHighlight onPress={this.props.onRowPress.bind(null, book)}>
+        <View style={styles.row}>
+          <Image style={styles.image}
+            source={{ uri: book.coverUrl }} />
+          <View style={styles.body}>
+            <Text style={styles.title}>
+              {book.title}
+            </Text>
+            <Text style={styles.author}>
+              {book.author}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableHighlight>
     )
   }
   render() {
@@ -52,7 +52,8 @@ class BooksList extends React.Component {
   }
 }
 BooksList.defaultProps = {
-  books: []
+  books: [],
+  onRowPress: () => {}
 }
 module.exports = BooksList
 
