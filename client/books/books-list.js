@@ -8,6 +8,7 @@ var {
   Image,
   View,
   ListView,
+  Image,
   TouchableHighlight
 } = React
 
@@ -16,13 +17,16 @@ class BooksList extends React.Component {
     super(props)
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
     this.state = {
-      dataSource: ds.cloneWithRows(this.props.books)
+      dataSource: ds.cloneWithRows(this.getRows(this.props))
     }
+  }
+  getRows(props) {
+    return [{ isHeader: true }].concat(props.books)
   }
   componentWillReceiveProps(newProps) {
     if (newProps.books)
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(newProps.books)
+        dataSource: this.state.dataSource.cloneWithRows(this.getRows(newProps))
       })
   }
   renderBook(book) {
@@ -45,22 +49,27 @@ class BooksList extends React.Component {
       </TouchableHighlight>
     )
   }
+  renderHeader() {
+    return <Image source={require('image!booksLogo')} style={styles.logo} />
+  }
+  renderRow(row) {
+    return row.isHeader ? this.renderHeader() : this.renderBook(row)
+  }
   render() {
     return (
         <ListView dataSource={this.state.dataSource}
                   onEndReached={this.props.onEndReached}
                   onEndReachedThreshold={this.props.onEndReachedThreshold}
-                  renderRow={this.renderBook.bind(this)}
+                  renderRow={this.renderRow.bind(this)}
                   contentInset={{ top: -40 }}
                   styles={commonStyles.wrapper} />
-
     )
   }
 }
 BooksList.defaultProps = {
   books: [],
   onRowPress: () => {},
-  onEndReachedThreshold: 1000
+  onEndReachedThreshold: 500
 }
 module.exports = BooksList
 
@@ -77,6 +86,13 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#D7D7D7',
     borderBottomWidth: 1
+  },
+  logo: {
+    height: 100,
+    width: 200,
+    marginTop: 80,
+    resizeMode: 'contain',
+    alignSelf: 'center'
   },
   image: {
     flex: 1,

@@ -6,7 +6,7 @@ var BooksList = require('./books-list')
 var commonStyles = require('../common/styles')
 var store = require('./books-store')
 
-var { View, ScrollView, StyleSheet, Image } = React
+var { ActivityIndicatorIOS, StyleSheet, View } = React
 
 // This controller view exists as beneath NavigatorIOS so that as props
 // change, the proper listeners are in place to update the view component
@@ -24,8 +24,9 @@ module.exports = class BooksIndex extends React.Component {
     store.unlisten(this.handleStoreStateChange)
   }
   handleStoreStateChange() {
-    this.setState(store.getState())
-    // TODO: handle turning off loading
+    this.setState(store.getState(), () => {
+      this.setState({ isLoading: false })
+    })
   }
   handleRowPress(book) {
     this.props.navigator.push({
@@ -40,37 +41,30 @@ module.exports = class BooksIndex extends React.Component {
       this.setState({ isLoading: true })
     }
   }
-  renderLoading() {
+  renderLoader() {
     if (this.state.isLoading)
       return <ActivityIndicatorIOS
         animating={true}
         style={styles.loader}
-        size="large"
+        size="small"
       />
   }
   render() {
     return (
-      <View contentInset={{top: -60}} style={commonStyles.wrapper}>
-        <Image style={styles.logo} source={require('image!booksLogo')} />
+      <View style={commonStyles.wrapper}>
         <BooksList books={this.state.books}
                    onRowPress={this.handleRowPress.bind(this)}
                    onEndReached={this.handleListEndReached.bind(this)}
-          />
+        />
+        {this.renderLoader()}
       </View>
     )
   }
 }
 
 var styles = StyleSheet.create({
-  logo: {
-    height: 100,
-    width: 200,
-    marginTop: 80,
-    resizeMode: 'contain',
-    alignSelf: 'center'
-  },
   loader: {
-    height: 80,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center'
   }
