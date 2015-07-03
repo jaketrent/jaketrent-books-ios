@@ -10,8 +10,7 @@ module.exports = class Index extends React.Component {
     return (
       <NavigatorIOS style={commonStyles.wrapper}
                     initialRoute={{
-                      component: BooksIndex,
-                      title: 'Books'
+                      component: BooksIndex
                     }} />
     )
   }
