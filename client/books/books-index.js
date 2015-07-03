@@ -35,10 +35,10 @@ module.exports = class BooksIndex extends React.Component {
     });
   }
   handleListEndReached() {
-    //if (store.hasNextPage()) {
-    //  actions.fetch(store.getNextPage())
-    //  this.setState({ isLoading: true })
-    // }
+    if (store.hasNextPage()) {
+      actions.fetch(store.getNextPageUrl())
+      this.setState({ isLoading: true })
+    }
   }
   renderLoading() {
     if (this.state.isLoading)
@@ -50,13 +50,13 @@ module.exports = class BooksIndex extends React.Component {
   }
   render() {
     return (
-      <ScrollView contentInset={{top: -60}}>
+      <View contentInset={{top: -60}} style={commonStyles.wrapper}>
         <Image style={styles.logo} source={require('image!booksLogo')} />
         <BooksList books={this.state.books}
                    onRowPress={this.handleRowPress.bind(this)}
                    onEndReached={this.handleListEndReached.bind(this)}
           />
-      </ScrollView>
+      </View>
     )
   }
 }

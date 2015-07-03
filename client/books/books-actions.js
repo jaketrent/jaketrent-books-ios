@@ -5,9 +5,9 @@ class BooksActions {
   fetchSuccess(books) {
     this.dispatch(books)
   }
-  fetch() {
-    api.fetch()
-    this.dispatch()
+  fetch(url) {
+    api.fetch(url)
+    this.dispatch(url)
   }
 }
 

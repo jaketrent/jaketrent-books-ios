@@ -1,3 +1,4 @@
+var parseLinkHeader = require('parse-link-header')
 
 // TODO: figure out why books-actions#fetchSuccess is undefined without this
 var actions
@@ -19,8 +20,15 @@ function camelCase(obj) {
   }, {})
 }
 
-exports.fetch = function fetchBooks() {
-  fetch('http://data.jaketrent.com/api/v1/books')
+function hasNextPageHeader(res) {
+  return res.headers && res.headers && res.headers.map && res.headers.map.link && res.headers.map.link[0]
+}
+
+exports.fetch = function fetchBooks(url) {
+  if (!url)
+    url = 'http://data.jaketrent.com/api/v1/books?page=1'
+
+  fetch(url.trim())
     .then((res) => {
       return {
         res,
@@ -32,14 +40,19 @@ exports.fetch = function fetchBooks() {
       resAndJson.json.then((json) => {
         if (res.status >= 200 && res.status < 300) {
           var books = json.books.map((book) => camelCase(book))
-          console.log('books', books)
-          getActions().fetchSuccess(books)
+
+          var linkHeader
+          if (hasNextPageHeader(res))
+            linkHeader = parseLinkHeader(res.headers.map.link[0])
+
+          getActions().fetchSuccess({ books, linkHeader })
         } else {
           // TODO: errors
         }
       })
     })
-    //.catch((err) => {
-      // What's in the box?!
-    //})
+    .catch((err) => {
+      console.log('err', err)
+      throw err
+    })
 }

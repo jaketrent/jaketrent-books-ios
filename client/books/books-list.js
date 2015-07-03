@@ -1,5 +1,7 @@
 var React = require('react-native')
 
+var commonStyles = require('../common/styles')
+
 var {
   StyleSheet,
   Text,
@@ -45,13 +47,12 @@ class BooksList extends React.Component {
   }
   render() {
     return (
-      <View style={styles.container}>
         <ListView dataSource={this.state.dataSource}
                   onEndReached={this.props.onEndReached}
                   onEndReachedThreshold={this.props.onEndReachedThreshold}
                   renderRow={this.renderBook.bind(this)}
-                  contentInset={{ top: -40 }} />
-      </View>
+                  contentInset={{ top: -40 }}
+                  styles={commonStyles.wrapper} />
 
     )
   }
