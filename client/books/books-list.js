@@ -47,7 +47,10 @@ class BooksList extends React.Component {
     return (
       <View style={styles.container}>
         <ListView dataSource={this.state.dataSource}
-                  renderRow={this.renderBook.bind(this)} />
+                  onEndReached={this.props.onEndReached}
+                  onEndReachedThreshold={this.props.onEndReachedThreshold}
+                  renderRow={this.renderBook.bind(this)}
+                  contentInset={{ top: -40 }} />
       </View>
 
     )
@@ -55,7 +58,8 @@ class BooksList extends React.Component {
 }
 BooksList.defaultProps = {
   books: [],
-  onRowPress: () => {}
+  onRowPress: () => {},
+  onEndReachedThreshold: 1000
 }
 module.exports = BooksList
 
@@ -67,6 +71,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     padding: 20,
+    paddingTop: 0,
     height: 150,
     alignItems: 'center',
     borderColor: '#D7D7D7',
